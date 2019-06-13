@@ -1,0 +1,349 @@
+<html>
+<head>
+<title>IHatePollen.com - A community fighting for the rights of people with sensitive immune systems!</title>
+<style>
+body {
+  font-family: Helvetica, sans-serif;
+}
+.header {
+  /*background: #1abc9c;
+  background-image: url("https://www.pollen.com/Content/articles/info/what-is-allergy.jpg");*/
+  background-image: url("https://www.pollen.com/Content/articles/info/ai-grass-pollens.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  padding: 50px; /* tbh idk */
+  text-align: center;
+}
+.header h1 { /* Font size of the header gets bigger */
+  font-size: 40px;
+}
+  
+/* Navigation bar */
+.navbar {
+  background-color:  #003300; /*#333;*/
+  overflow: hidden; /* Hide overflow */
+ 
+}
+/* Navigation bar links */
+.navbar a {
+  float: right; /* Make sure that the links stay side-by-side */
+  display: block; /* Change the display to block, for responsive reasons (see below) */
+  color: white;
+  text-align: center;
+  padding: 14px 20px; /* Adds padding??? idk */
+  text-decoration: none; /* No underline??? */
+}
+  
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #99cc00; /*#86b300; /*#d9ff66;/*#b3ff66; /*#ddd; (put this in comments)Grey background color */
+  color: black; /* Black text color */
+}
+  
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.active, .collapsible:hover {
+  background-color: #555;
+}
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}  
+  
+  
+  
+  
+  
+/*javascript*/
+  
+/*body{
+    font-size: 20px;
+    font-family: sans-serif;
+    color: #333;
+}
+*/
+.question{
+    font-weight: 600;
+}
+.answers {
+  margin-bottom: 20px;
+}
+.answers label{
+  display: block;
+}
+#submit{
+    font-family: sans-serif;
+    font-size: 20px;
+    background-color: #279;
+    color: #fff;
+    border: 0px;
+    border-radius: 3px;
+    padding: 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+#submit:hover{
+    background-color: #38a;
+  
+</style>
+</head>
+<body>
+  
+<div class="navbar">
+  <a href="#">Quizzes</a>
+  <a href="https://derekwlee.github.io/csp-final-project-stories-2019/">Stories</a>
+  <a href="https://derekwlee.github.io/csp-final-project-news-2019/">News</a> <!--include something about ariana grande-->
+  <a href="https://derekwlee.github.io/csp-final-project-about-2019/">About Us</a> <!--include a contact-us-->
+  <a href="https://derekwlee.github.io/csp-final-project-2019/">Home</a>
+</div>  
+  
+  <div class="header">
+    <h1>Pollen, NO!</h1>
+    <h3>Support the fight against seasonal allergies!</h3>
+  </div>
+  
+<h1>Seasonal Allergy Quiz</h1>
+  
+<button class="collapsible">Test Your Knowledge on Seasonal Allergies!</button>
+  <div class="content">
+    <br>
+    <div id="quiz"></div>
+    <button id="submit">Submit Quiz</button>
+    <div id="results"></div>
+  </div>
+ <h1>News Article Quiz</h1>
+ <button class="collapisble">Test Your Knowledge on Our News Article!</button>
+  <div class="content">
+    <br>
+    <div id="quiz"></div>
+    <button id="submit">Submit Quiz</button>
+    <div id="results"></div>
+  </div>
+  
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+var i;
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+  
+  (function() {
+  function buildQuiz() {
+    // we'll need a place to store the HTML output
+    const output = [];
+    // for each question...
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+      // we'll want to store the list of answer choices
+      const answers = [];
+      // and for each available answer...
+      for (letter in currentQuestion.answers) {
+        // ...add an HTML radio button
+        answers.push(
+          `<label>
+            <input type="radio" name="question${questionNumber}" value="${letter}">
+            ${letter} :
+            ${currentQuestion.answers[letter]}
+          </label>`
+        );
+      }
+      // add this question and its answers to the output
+      output.push(
+        `<div class="question"> ${currentQuestion.question} </div>
+        <div class="answers"> ${answers.join("")} </div>`
+      );
+    });
+    // finally combine our output list into one string of HTML and put it on the page
+    quizContainer.innerHTML = output.join("");
+  }
+  function showResults() {
+    // gather answer containers from our quiz
+    const answerContainers = quizContainer.querySelectorAll(".answers");
+    // keep track of user's answers
+    let numCorrect = 0;
+    // for each question...
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+      // find selected answer
+      const answerContainer = answerContainers[questionNumber];
+      const selector = `input[name=question${questionNumber}]:checked`;
+      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+      // if answer is correct
+      if (userAnswer === currentQuestion.correctAnswer) {
+        // add to the number of correct answers
+        numCorrect++;
+        // color the answers green
+        answerContainers[questionNumber].style.color = "green";
+      } else {
+        // if answer is wrong or blank
+        // color the answers red
+        answerContainers[questionNumber].style.color = "red";
+      }
+    });
+    
+    // show number of correct answers out of total
+    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+  }
+  const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
+  const myQuestions = [
+    {
+      question: "Which Body System is Responsible for Allergies?",
+      answers: {
+        a: "Circulatory System",
+        b: "Reproductive System",
+        c: "Immune System",
+        d: "Body System",
+        e: "Neurological System",
+      },
+      correctAnswer: "c"
+    },
+    {
+      question: "What is NOT a Symptom for Seasonal Allergies?",
+      answers: {
+        a: "Wheezing",
+        b: "Dry Lips",
+        c: "Itchy Throat",
+        d: "Nasal Congestion",
+        e: "Coughing",
+      },
+      correctAnswer: "b"
+    },
+    {
+      question: "Which of the Following are NOT Responsible for Seasonal Allergies?",
+      answers: {
+        a: "Ragweed Pollen",
+        b: "Grass Pollen",
+        c: "Mugwort Pollen",
+        d: "Weed",
+        e: "Climate Change",
+      },
+      correctAnswer: "d"
+    },
+    {
+      question: "How Can I Treat My Allergies?",
+      answers: {
+        a: "Allergy Shots",
+        b: "Anti-Inflammatory Medication",
+        c: "Algebra 2 Honors with Whitney",
+        d: "Allergy Cleanser",
+        e: "Hypo-Allergenic Pills",
+      },
+      correctAnswer: "a"
+    },
+    {
+      question: "What is Another Name for Seasonal Allergies?",
+      answers: {
+        a: "Dermatitis",
+        b: "Hay Season",
+        c: "Common Cold",
+        d: "Anaphylaxis",
+        e: "Hay Fever",
+      },
+      correctAnswer: "e"
+    },
+    {
+      question: "What is Caused by Cross-Reacting Allergens Found in Pollen?",
+      answers: {
+        a: "Seasonal Allergies",
+        b: "Pollen-Allergen Disorder",
+        c: "Cross-Reacting Allergen Syndrome",
+        d: "Oral Allergy Syndrome",
+        e: "Cross-Reacting Pollen Disorder",
+      },
+      correctAnswer: "d"
+    },
+    {
+      question: "Which Food's Proteins CAN'T Cross-React with Pollen?",
+      answers: {
+        a: "Kiwi",
+        b: "Potatoes",
+        c: "Carrots",
+        d: "Milk",
+        e: "Honeydew",
+      },
+      correctAnswer: "d"
+    },
+    {
+      question: "Which of the Following Plant Pollen Can Occur in April?",
+      answers: {
+        a: "Willow",
+        b: "Sagebrush",
+        c: "Cedar Elm",
+        d: "Mountain Cedar",
+        e: "Hanamaru Kunikida",
+      },
+      correctAnswer: "d"
+    },
+    {
+      question: "Which of the Following CANNOT Cause Allergies?",
+      answers: {
+        a: "Latex",
+        b: "David Whitney",
+        c: "Cremation",
+        d: "Bee Venom",
+        e: "Mold",
+      },
+      correctAnswer: "c"
+    },
+    {
+      question: "Which of the Following Plant Pollen Can Occur in April?",
+      answers: {
+        a: "Willow",
+        b: "Sagebrush",
+        c: "Cedar Elm",
+        d: "Mountain Cedar",
+        e: "Hanamaru Kunikida",
+      },
+      correctAnswer: "d"
+    },
+
+  ];
+  // display quiz right away
+  buildQuiz();
+  // on submit, show results
+  submitButton.addEventListener("click", showResults);
+})();
+const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
+  const myQuestions = [
+    {
+      question: "Which Sweetener/Thank U Next Tour City Did Ariana Grande Postpone Because of an Allergic Reaction?",
+      answers: {
+        a: "Orlando",
+        b: "Chicago",
+        c: "St. Louis",
+        d: "New York City",
+        e: "Portland",
+      },
+      correctAnswer: "a"
+    },
+  ];
+  // display quiz right away
+  buildQuiz();
+  // on submit, show results
+  submitButton.addEventListener("click", showResults);
+})();
+  </script>
+</body>
+</html>
